@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Todo App</h1>
+    
+    <label for="status">Filter by status:</label>
+    <select id="status">
+        <option value="">All</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+        <!-- Add more options for other statuses if needed -->
+    </select>
+    
+    <button id="fetchTodos">Fetch Todos</button>
+    
+    <ul id="todoList"></ul>
+    
+    <script>
+        const fetchTodos = async () => {
+            const status = document.getElementById('status').value;
+            const response = await fetch(`/todos${status ? `?status=${status}` : ''}`);
+            const todos = await response.json();
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.textContent = `${todo.title} - ${todo.description}`;
+                todoList.appendChild(li);
+            });
+        };
+        
+        document.getElementById('fetchTodos').addEventListener('click', fetchTodos);
+    </script>
+</body>
+</html>
